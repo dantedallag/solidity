@@ -117,8 +117,22 @@ void EVMHost::selfdestruct(const evmc_address& _addr, const evmc_address& _benef
 
 evmc::result EVMHost::call(evmc_message const& _message) noexcept
 {
-	if (_message.destination == convertToEVMC(Address(2)))
+	if (_message.destination == convertToEVMC(Address(1)))
+		return precompileECRecover(_message);
+	else if (_message.destination == convertToEVMC(Address(2)))
 		return precompileSha256(_message);
+	else if (_message.destination == convertToEVMC(Address(3)))
+		return precompileRipeMD160(_message);
+	else if (_message.destination == convertToEVMC(Address(4)))
+		return precompileIdentity(_message);
+	else if (_message.destination == convertToEVMC(Address(5)))
+		return precompileModExp(_message);
+	else if (_message.destination == convertToEVMC(Address(6)))
+		return precompileALTBN128G1Add(_message);
+	else if (_message.destination == convertToEVMC(Address(7)))
+		return precompileALTBN128G1Mul(_message);
+	else if (_message.destination == convertToEVMC(Address(8)))
+		return precompileALTBN128PairingProduct(_message);
 
 	State stateBackup = m_state;
 
@@ -264,6 +278,13 @@ evmc_bytes32 EVMHost::convertToEVMC(h256 const& _data)
 	return d;
 }
 
+evmc::result EVMHost::precompileECRecover(evmc_message const&) noexcept
+{
+	// TODO implement
+	evmc::result result({});
+	return result;
+}
+
 evmc::result EVMHost::precompileSha256(evmc_message const& _message) noexcept
 {
 	// static data so that we do not need a release routine...
@@ -278,3 +299,46 @@ evmc::result EVMHost::precompileSha256(evmc_message const& _message) noexcept
 	result.output_size = hash.size();
 	return result;
 }
+
+evmc::result EVMHost::precompileRipeMD160(evmc_message const&) noexcept
+{
+	// TODO implement
+	evmc::result result({});
+	return result;
+}
+
+evmc::result EVMHost::precompileIdentity(evmc_message const&) noexcept
+{
+	// TODO implement
+	evmc::result result({});
+	return result;
+}
+
+evmc::result EVMHost::precompileModExp(evmc_message const&) noexcept
+{
+	// TODO implement
+	evmc::result result({});
+	return result;
+}
+
+evmc::result EVMHost::precompileALTBN128G1Add(evmc_message const&) noexcept
+{
+	// TODO implement
+	evmc::result result({});
+	return result;
+}
+
+evmc::result EVMHost::precompileALTBN128G1Mul(evmc_message const&) noexcept
+{
+	// TODO implement
+	evmc::result result({});
+	return result;
+}
+
+evmc::result EVMHost::precompileALTBN128PairingProduct(evmc_message const&) noexcept
+{
+	// TODO implement
+	evmc::result result({});
+	return result;
+}
+

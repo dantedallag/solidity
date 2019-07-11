@@ -159,7 +159,14 @@ public:
 	evmc_address m_coinbase = convertToEVMC(Address("0x7878787878787878787878787878787878787878"));
 
 private:
+	evmc::result precompileECRecover(evmc_message const& _message) noexcept;
 	evmc::result precompileSha256(evmc_message const& _message) noexcept;
+	evmc::result precompileRipeMD160(evmc_message const& _message) noexcept;
+	evmc::result precompileIdentity(evmc_message const& _message) noexcept;
+	evmc::result precompileModExp(evmc_message const& _message) noexcept;
+	evmc::result precompileALTBN128G1Add(evmc_message const& _message) noexcept;
+	evmc::result precompileALTBN128G1Mul(evmc_message const& _message) noexcept;
+	evmc::result precompileALTBN128PairingProduct(evmc_message const& _message) noexcept;
 
 	evmc::vm& m_vm;
 	evmc_revision m_evmVersion;
