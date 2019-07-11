@@ -278,10 +278,33 @@ evmc_bytes32 EVMHost::convertToEVMC(h256 const& _data)
 	return d;
 }
 
-evmc::result EVMHost::precompileECRecover(evmc_message const&) noexcept
+evmc::result EVMHost::precompileECRecover(evmc_message const& _message) noexcept
 {
-	// TODO implement
+	bytes static data;
+	data = bytes(_message.input_data, _message.input_data + _message.input_size);
+
+	// Some fixed inputs...
+	if (data == fromHex(
+		"18c547e4f7b0f325ad1e56f57e26c745b09a3e503d86e00e5255ff7f715d3d1c"
+		"000000000000000000000000000000000000000000000000000000000000001c"
+		"73b1693892219d736caba55bdb67216e485557ea6b6af75f37096c9aa6a5a75f"
+		"eeb940b1d03b21e36b0e47e79769f095fe2ab855bd91e3a38756b7d75a9c4549"
+	))
+		data = fromHex("000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b");
+	else if (data == fromHex(
+		"47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad"
+		"000000000000000000000000000000000000000000000000000000000000001c"
+		"debaaa0cddb321b2dcaaf846d39605de7b97e77ba6106587855b9106cb104215"
+		"61a22d94fa8b8a687ff9c911c844d1c016d1a685a9166858f9c7c1bc85128aca"
+	))
+		data = fromHex("0000000000000000000000008743523d96a1b2cbe0c6909653a56da18ed484af");
+	else
+		data = {};
+
+	// TODO this and the above is shared among the precompiles...
 	evmc::result result({});
+	result.output_data = data.data();
+	result.output_size = data.size();
 	return result;
 }
 
@@ -300,17 +323,66 @@ evmc::result EVMHost::precompileSha256(evmc_message const& _message) noexcept
 	return result;
 }
 
-evmc::result EVMHost::precompileRipeMD160(evmc_message const&) noexcept
+evmc::result EVMHost::precompileRipeMD160(evmc_message const& _message) noexcept
 {
-	// TODO implement
+	bytes static data;
+	data = bytes(_message.input_data, _message.input_data + _message.input_size);
+
+	// Some fixed inputs...
+	if (data.empty())
+		data = fromHex("0000000000000000000000009c1185a5c5e9fc54612808977ee8f548b2258d31");
+	else if (data == fromHex("0000000000000000000000000000000000000000000000000000000000000004"))
+		data = fromHex("0000000000000000000000001b0f3c404d12075c68c938f9f60ebea4f74941a0");
+	else if (data == fromHex("0000000000000000000000000000000000000000000000000000000000000005"))
+		data = fromHex("000000000000000000000000ee54aa84fc32d8fed5a5fe160442ae84626829d9");
+	else if (data == fromHex("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"))
+		data = fromHex("0000000000000000000000001cf4e77f5966e13e109703cd8a0df7ceda7f3dc3");
+	else if (data == fromHex("0000000000000000000000000000000000000000000000000000000000000000"))
+		data = fromHex("000000000000000000000000f93175303eba2a7b372174fc9330237f5ad202fc");
+	else if (data == fromHex(
+		"0800000000000000000000000000000000000000000000000000000000000000"
+		"0401000000000000000000000000000000000000000000000000000000000000"
+		"0000000400000000000000000000000000000000000000000000000000000000"
+		"00000100"
+	))
+		data = fromHex("000000000000000000000000f93175303eba2a7b372174fc9330237f5ad202fc");
+	else if (data == fromHex(
+		"0800000000000000000000000000000000000000000000000000000000000000"
+		"0501000000000000000000000000000000000000000000000000000000000000"
+		"0000000500000000000000000000000000000000000000000000000000000000"
+		"00000100"
+	))
+		data = fromHex("0000000000000000000000004f4fc112e2bfbe0d38f896a46629e08e2fcfad5");
+	else if (data == fromHex(
+		"08ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+		"ff010000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+		"ffffffff00000000000000000000000000000000000000000000000000000000"
+		"00000100"
+	))
+		data = fromHex("000000000000000000000000c0a2e4b1f3ff766a9a0089e7a410391730872495");
+	else if (data == fromHex(
+		"6162636465666768696a6b6c6d6e6f707172737475767778797a414243444546"
+		"4748494a4b4c4d4e4f505152535455565758595a303132333435363738393f21"
+	))
+		data = fromHex("00000000000000000000000036c6b90a49e17d4c1e1b0e634ec74124d9b207da");
+	else if (data == fromHex("6162636465666768696a6b6c6d6e6f707172737475767778797a414243444546"))
+		data = fromHex("000000000000000000000000ac5ab22e07b0fb80c69b6207902f725e2507e546");
+	else
+		data = {};
 	evmc::result result({});
+	result.output_data = data.data();
+	result.output_size = data.size();
 	return result;
 }
 
-evmc::result EVMHost::precompileIdentity(evmc_message const&) noexcept
+evmc::result EVMHost::precompileIdentity(evmc_message const& _message) noexcept
 {
-	// TODO implement
+	// static data so that we do not need a release routine...
+	bytes static data;
+	data = bytes(_message.input_data, _message.input_data + _message.input_size);
 	evmc::result result({});
+	result.output_data = data.data();
+	result.output_size = data.size();
 	return result;
 }
 
